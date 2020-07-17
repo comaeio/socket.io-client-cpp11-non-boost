@@ -46,7 +46,7 @@ h.connect("http://127.0.0.1:3000");
 
 ```C++
 // emit event name only:
-h.socket->emit("login");
+h.socket()->emit("login");
 
 // emit text
 h.socket()->emit("add user", username);

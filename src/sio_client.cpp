@@ -18,8 +18,12 @@
 
 /* For this code, we will use standalone ASIO
    and websocketpp in C++11 mode only */
+#ifndef ASIO_STANDALONE
 #define ASIO_STANDALONE
+#endif // ASIO_STANDALONE
+#ifndef _WEBSOCKETPP_CPP11_STL_
 #define _WEBSOCKETPP_CPP11_STL_
+#endif // _WEBSOCKETPP_CPP11_STL_
 
 #include "sio_client.h"
 #include "internal/sio_client_impl.h"
@@ -86,13 +90,18 @@ namespace sio
 
     void client::connect(const std::string& uri)
     {
-        const std::map<string,string> query;
-        m_impl->connect(uri, query);
+        m_impl->connect(uri, {}, {});
     }
 
     void client::connect(const std::string& uri, const std::map<string,string>& query)
     {
-        m_impl->connect(uri, query);
+        m_impl->connect(uri, query, {});
+    }
+
+    void client::connect(const std::string& uri, const std::map<std::string,std::string>& query,
+                         const std::map<std::string,std::string>& http_extra_headers)
+    {
+        m_impl->connect(uri, query, http_extra_headers);
     }
 
     socket::ptr const& client::socket(const std::string& nsp)

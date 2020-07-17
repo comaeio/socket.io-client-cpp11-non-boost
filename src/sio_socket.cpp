@@ -13,8 +13,12 @@
 
 /* For this code, we will use standalone ASIO
    and websocketpp in C++11 mode only */
+#ifndef ASIO_STANDALONE
 #define ASIO_STANDALONE
+#endif // ASIO_STANDALONE
+#ifndef _WEBSOCKETPP_CPP11_STL_
 #define _WEBSOCKETPP_CPP11_STL_
+#endif // _WEBSOCKETPP_CPP11_STL_
 
 #include "sio_socket.h"
 #include "internal/sio_packet.h"
@@ -245,8 +249,8 @@ namespace sio
 
     socket::impl::impl(client_impl *client,std::string const& nsp):
         m_client(client),
-        m_nsp(nsp),
-        m_connected(false)
+        m_connected(false),
+        m_nsp(nsp)
     {
         NULL_GUARD(client);
         if(m_client->opened())
@@ -466,7 +470,7 @@ namespace sio
         }
     }
 
-    void socket::impl::ack(int msgId, const string &name, const message::list &ack_message)
+    void socket::impl::ack(int msgId, const string &, const message::list &ack_message)
     {
         packet p(m_nsp, ack_message.to_array_message(),msgId,true);
         send_packet(p);
